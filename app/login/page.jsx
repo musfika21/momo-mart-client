@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, Suspense } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { signIn } from 'next-auth/react'
@@ -7,7 +7,8 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { Mail, Lock, Eye, EyeOff, AlertCircle } from 'lucide-react'
 import toast from 'react-hot-toast'
 
-export default function Login() {
+// Separate component for the login form that uses useSearchParams
+function LoginForm() {
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [formData, setFormData] = useState({
@@ -121,7 +122,6 @@ export default function Login() {
       }
     }
   }, [error])
-
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4 py-12 bg-gradient-to-br from-primary-50 to-primary-100 dark:from-gray-900 dark:to-gray-800">
@@ -310,5 +310,45 @@ export default function Login() {
         </div>
       </div>
     </div>
+  )
+}
+
+// Loading fallback component
+function LoginFallback() {
+  return (
+    <div className="min-h-screen flex items-center justify-center px-4 py-12 bg-gradient-to-br from-primary-50 to-primary-100 dark:from-gray-900 dark:to-gray-800">
+      <div className="max-w-md w-full">
+        <div className="text-center mb-8">
+          <div className="inline-flex items-center space-x-2 mb-6">
+            <div className="w-10 h-10 bg-gray-300 dark:bg-gray-600 rounded animate-pulse"></div>
+            <div className="w-32 h-8 bg-gray-300 dark:bg-gray-600 rounded animate-pulse"></div>
+          </div>
+          <div className="w-24 h-9 bg-gray-300 dark:bg-gray-600 rounded animate-pulse mx-auto mb-2"></div>
+          <div className="w-64 h-6 bg-gray-300 dark:bg-gray-600 rounded animate-pulse mx-auto"></div>
+        </div>
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
+          <div className="space-y-6">
+            <div className="space-y-2">
+              <div className="w-24 h-4 bg-gray-300 dark:bg-gray-600 rounded animate-pulse"></div>
+              <div className="w-full h-12 bg-gray-300 dark:bg-gray-600 rounded-lg animate-pulse"></div>
+            </div>
+            <div className="space-y-2">
+              <div className="w-20 h-4 bg-gray-300 dark:bg-gray-600 rounded animate-pulse"></div>
+              <div className="w-full h-12 bg-gray-300 dark:bg-gray-600 rounded-lg animate-pulse"></div>
+            </div>
+            <div className="w-full h-12 bg-gray-300 dark:bg-gray-600 rounded-lg animate-pulse"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// Main component that wraps LoginForm in Suspense
+export default function Login() {
+  return (
+    <Suspense fallback={<LoginFallback />}>
+      <LoginForm />
+    </Suspense>
   )
 }
