@@ -197,7 +197,7 @@ export default function AddProductPage() {
 
       console.log('Submitting:', submitData) // Debugging
 
-      const res = await fetch('http://localhost:5000/api/products', {
+      const res = await fetch('https://momos-care-server.vercel.app/api/products', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

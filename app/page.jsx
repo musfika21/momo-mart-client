@@ -7,7 +7,7 @@ import { Sparkles } from 'lucide-react'
 
 async function getFeaturedProducts() {
   try {
-    const res = await fetch('http://localhost:5000/api/products', {
+    const res = await fetch('https://momos-care-server.vercel.app/api/products', {
       cache: 'no-store'
     })
     if (!res.ok) {
